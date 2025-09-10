@@ -1,0 +1,1233 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thiệp Xin Lỗi - Hàn Gắn Tình Yêu</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;600;700&family=Poppins:wght@300;400;500;600&display=swap"
+        rel="stylesheet">
+    <style>
+        /* Reset và Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            height: 100%;
+            overflow-x: hidden;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 50%, #fecfef 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow-x: hidden;
+            position: relative;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        /* Container */
+        .container {
+            position: relative;
+            perspective: 1000px;
+            width: 100%;
+            max-width: 500px;
+            height: auto;
+            min-height: 80vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px 0;
+        }
+
+        /* Floating Hearts Background */
+        .hearts {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .heart {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background: #ff6b9d;
+            transform: rotate(45deg);
+            animation: float 6s ease-in-out infinite;
+            opacity: 0.3;
+        }
+
+        .heart:before,
+        .heart:after {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background: #ff6b9d;
+            border-radius: 50%;
+        }
+
+        .heart:before {
+            top: -10px;
+            left: 0;
+        }
+
+        .heart:after {
+            top: 0;
+            left: -10px;
+        }
+
+        .heart1 {
+            top: 20%;
+            left: 10%;
+            animation-delay: 0s;
+        }
+
+        .heart2 {
+            top: 60%;
+            left: 80%;
+            animation-delay: 2s;
+        }
+
+        .heart3 {
+            top: 80%;
+            left: 20%;
+            animation-delay: 4s;
+        }
+
+        .heart4 {
+            top: 30%;
+            left: 70%;
+            animation-delay: 1s;
+        }
+
+        .heart5 {
+            top: 10%;
+            left: 90%;
+            animation-delay: 3s;
+        }
+
+        @keyframes float {
+
+            0%,
+            100% {
+                transform: rotate(45deg) translateY(0px);
+            }
+
+            50% {
+                transform: rotate(45deg) translateY(-20px);
+            }
+        }
+
+        /* Main Card */
+        .card {
+            width: 100%;
+            max-width: 400px;
+            height: 600px;
+            position: relative;
+            cursor: pointer;
+            z-index: 10;
+            transition: transform 0.3s ease;
+            margin: 20px auto;
+            /* Đảm bảo có thể touch trên mobile */
+            touch-action: manipulation;
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+
+        /* Khi thiệp được mở trên mobile, đảm bảo scroll hoạt động */
+        .card.flipped {
+            touch-action: auto;
+        }
+
+        .card.flipped .card-back {
+            touch-action: auto;
+        }
+
+        .card:hover {
+            transform: scale(1.02);
+        }
+
+        .card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            /* Loại bỏ 3D transform để tránh text bị ngược */
+            /* transform-style: preserve-3d; */
+        }
+
+        .card.flipped .card-front {
+            opacity: 0;
+            visibility: hidden;
+            transform: scale(0.8);
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .card.flipped .card-back {
+            opacity: 1;
+            visibility: visible;
+            transform: scale(1);
+            pointer-events: auto;
+            z-index: 10;
+        }
+
+        .card-front,
+        .card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+            /* Đảm bảo text không bị ngược */
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            /* Đảm bảo có thể touch */
+            touch-action: manipulation;
+            /* Thay đổi cách hiển thị */
+            transition: all 0.8s ease-in-out;
+        }
+
+        .card-front {
+            opacity: 1;
+            visibility: visible;
+            transform: scale(1);
+            z-index: 10;
+            pointer-events: auto;
+        }
+
+        .card-back {
+            opacity: 0;
+            visibility: hidden;
+            transform: scale(0.8);
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        /* Front Card */
+        .card-front {
+            background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            padding: 40px 30px;
+            position: relative;
+        }
+
+        .card-front::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="hearts" patternUnits="userSpaceOnUse" width="20" height="20"><circle cx="10" cy="10" r="1" fill="%23ffffff" opacity="0.1"/></pattern></defs><rect width="100" height="100" fill="url(%23hearts)"/></svg>');
+        }
+
+        .header {
+            z-index: 2;
+        }
+
+        .title {
+            font-family: 'Dancing Script', cursive;
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #fff;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            margin-bottom: 10px;
+        }
+
+        .date {
+            font-size: 0.9rem;
+            color: #fff;
+            opacity: 0.9;
+            font-weight: 300;
+        }
+
+        .heart-icon {
+            font-size: 4rem;
+            animation: heartbeat 2s ease-in-out infinite;
+            z-index: 2;
+        }
+
+        @keyframes heartbeat {
+
+            0%,
+            100% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.1);
+            }
+        }
+
+        .message {
+            z-index: 2;
+        }
+
+        .main-text {
+            font-family: 'Dancing Script', cursive;
+            font-size: 1.3rem;
+            color: #fff;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .sub-text {
+            font-size: 0.8rem;
+            color: #fff;
+            opacity: 0.8;
+            font-style: italic;
+            animation: blink 2s ease-in-out infinite;
+            margin-bottom: 15px;
+        }
+
+        .open-card-btn {
+            background: rgba(255, 255, 255, 0.2);
+            border: 2px solid rgba(255, 255, 255, 0.8);
+            border-radius: 25px;
+            color: #fff;
+            font-size: 1rem;
+            font-weight: 600;
+            padding: 12px 24px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            font-family: 'Poppins', sans-serif;
+            touch-action: manipulation;
+            -webkit-touch-callout: none;
+            user-select: none;
+        }
+
+        .open-card-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .open-card-btn:active {
+            transform: scale(0.95);
+        }
+
+        .close-card-btn {
+            background: rgba(233, 30, 99, 0.2);
+            border: 2px solid #e91e63;
+            border-radius: 25px;
+            color: #e91e63;
+            font-size: 0.9rem;
+            font-weight: 600;
+            padding: 10px 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            font-family: 'Poppins', sans-serif;
+            touch-action: manipulation;
+            -webkit-touch-callout: none;
+            user-select: none;
+            margin-top: 15px;
+        }
+
+        .close-card-btn:hover {
+            background: rgba(233, 30, 99, 0.3);
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(233, 30, 99, 0.2);
+        }
+
+        .close-card-btn:active {
+            transform: scale(0.95);
+        }
+
+        @keyframes blink {
+
+            0%,
+            50%,
+            100% {
+                opacity: 0.8;
+            }
+
+            25%,
+            75% {
+                opacity: 0.4;
+            }
+        }
+
+        .decoration {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            z-index: 2;
+        }
+
+        .rose {
+            font-size: 2rem;
+            animation: sway 3s ease-in-out infinite;
+        }
+
+        .rose:nth-child(2) {
+            animation-delay: 1.5s;
+        }
+
+        @keyframes sway {
+
+            0%,
+            100% {
+                transform: rotate(-5deg);
+            }
+
+            50% {
+                transform: rotate(5deg);
+            }
+        }
+
+        /* Back Card */
+        .card-back {
+            background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+            padding: 0 20px 15px 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+            /* Đảm bảo scroll hoạt động */
+            max-height: 100%;
+            scrollbar-width: none;
+            /* Firefox */
+            -ms-overflow-style: none;
+            /* IE and Edge */
+        }
+
+        .card-back::-webkit-scrollbar {
+            display: none;
+            /* Chrome, Safari */
+        }
+
+        .sorry-title {
+            font-family: 'Dancing Script', cursive;
+            font-size: 2.2rem;
+            color: #e91e63;
+            text-align: center;
+            margin-bottom: 15px;
+            font-weight: 700;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+            margin-top: 10px;
+            padding-top: 0;
+        }
+
+        .content {
+            flex: 1;
+            margin-top: 0;
+            padding-top: 0;
+        }
+
+        .letter {
+            flex: 1;
+            text-align: left;
+            line-height: 1.4;
+            color: #333;
+            max-height: none;
+            overflow: visible;
+        }
+
+        .letter p {
+            margin-bottom: 8px;
+            font-size: 0.85rem;
+        }
+
+        .letter strong {
+            color: #e91e63;
+            font-weight: 600;
+        }
+
+        .promises {
+            list-style: none;
+            margin: 10px 0;
+            padding-left: 0;
+        }
+
+        .promises li {
+            margin-bottom: 6px;
+            font-size: 0.8rem;
+            padding-left: 5px;
+        }
+
+        .invitation {
+            background: rgba(233, 30, 99, 0.1);
+            border-left: 4px solid #e91e63;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+            font-size: 0.8rem;
+        }
+
+        .invitation strong {
+            display: block;
+            margin-bottom: 6px;
+            font-size: 0.85rem;
+        }
+
+        .invitation em {
+            color: #666;
+            font-size: 0.75rem;
+        }
+
+        .closing {
+            font-style: italic;
+            text-align: center;
+            color: #e91e63;
+            font-size: 0.8rem;
+            margin: 10px 0;
+        }
+
+        .signature {
+            text-align: center;
+            margin-top: 15px;
+        }
+
+        .signature p {
+            margin-bottom: 4px;
+            font-size: 0.75rem;
+        }
+
+        .name {
+            font-family: 'Dancing Script', cursive;
+            font-size: 1.1rem;
+            color: #e91e63;
+            font-weight: 600;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 15px;
+            padding-top: 10px;
+            border-top: 1px solid rgba(233, 30, 99, 0.2);
+            flex-shrink: 0;
+        }
+
+        .couple {
+            font-size: 1.2rem;
+            margin-bottom: 6px;
+        }
+
+        .footer p {
+            font-size: 0.65rem;
+            color: #666;
+            font-style: italic;
+            margin: 0 0 10px 0;
+        }
+
+        /* Instruction */
+        .instruction {
+            position: relative;
+            margin-top: 20px;
+            z-index: 5;
+            animation: pulse 2s ease-in-out infinite;
+            text-align: center;
+        }
+
+        .instruction p {
+            color: #fff;
+            font-size: 0.9rem;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+            text-align: center;
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                opacity: 0.7;
+                transform: scale(1);
+            }
+
+            50% {
+                opacity: 1;
+                transform: scale(1.05);
+            }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 480px) {
+            body {
+                padding: 5px;
+                min-height: 100vh;
+            }
+
+            .container {
+                min-height: 95vh;
+                padding: 5px 0;
+            }
+
+            .card {
+                width: 100%;
+                max-width: 350px;
+                height: 500px;
+                margin: 5px auto;
+            }
+
+            .card-front {
+                padding: 20px 15px;
+            }
+
+            .card-back {
+                padding: 0 12px 10px 12px;
+                /* Tối ưu cho mobile */
+                height: 100%;
+                box-sizing: border-box;
+            }
+
+            .title {
+                font-size: 1.6rem;
+            }
+
+            .heart-icon {
+                font-size: 2rem;
+                margin: 10px 0;
+            }
+
+            .main-text {
+                font-size: 0.9rem;
+            }
+
+            .open-card-btn {
+                font-size: 0.8rem;
+                padding: 8px 16px;
+                margin-top: 8px;
+            }
+
+            .close-card-btn {
+                font-size: 0.7rem;
+                padding: 6px 12px;
+                margin-top: 8px;
+            }
+
+            .sorry-title {
+                font-size: 1.6rem;
+                margin-bottom: 8px;
+                margin-top: 8px;
+                padding-top: 0;
+            }
+
+            .content {
+                margin-top: 0;
+                padding-top: 0;
+            }
+
+            .letter p {
+                font-size: 0.75rem;
+                margin-bottom: 6px;
+                line-height: 1.3;
+            }
+
+            .promises li {
+                font-size: 0.7rem;
+                margin-bottom: 4px;
+            }
+
+            .invitation {
+                padding: 8px;
+                margin: 8px 0;
+                font-size: 0.75rem;
+            }
+
+            .invitation strong {
+                font-size: 0.8rem;
+                margin-bottom: 4px;
+            }
+
+            .invitation em {
+                font-size: 0.7rem;
+            }
+
+            .closing {
+                font-size: 0.75rem;
+                margin: 8px 0;
+            }
+
+            .signature {
+                margin-top: 10px;
+            }
+
+            .signature p {
+                font-size: 0.7rem;
+                margin-bottom: 3px;
+            }
+
+            .name {
+                font-size: 1rem;
+            }
+
+            .footer {
+                margin-top: 10px;
+                padding-top: 8px;
+            }
+
+            .couple {
+                font-size: 1rem;
+                margin-bottom: 4px;
+            }
+
+            .footer p {
+                font-size: 0.6rem;
+                margin-bottom: 8px;
+            }
+
+            .instruction {
+                margin-top: 10px;
+            }
+
+            .instruction p {
+                font-size: 0.75rem;
+            }
+        }
+
+        @media (max-width: 360px) {
+            .card {
+                height: 450px;
+                max-width: 320px;
+            }
+
+            .title {
+                font-size: 1.4rem;
+            }
+
+            .heart-icon {
+                font-size: 1.8rem;
+            }
+
+            .card-back {
+                padding: 0 10px 8px 10px;
+            }
+
+            .sorry-title {
+                font-size: 1.4rem;
+                margin-bottom: 6px;
+                margin-top: 6px;
+                padding-top: 0;
+            }
+
+            .content {
+                margin-top: 0;
+                padding-top: 0;
+            }
+
+            .letter p {
+                font-size: 0.7rem;
+                margin-bottom: 5px;
+                line-height: 1.2;
+            }
+
+            .promises li {
+                font-size: 0.65rem;
+                margin-bottom: 3px;
+            }
+
+            .invitation {
+                padding: 6px;
+                margin: 6px 0;
+                font-size: 0.7rem;
+            }
+
+            .invitation strong {
+                font-size: 0.75rem;
+            }
+
+            .invitation em {
+                font-size: 0.65rem;
+            }
+
+            .open-card-btn {
+                font-size: 0.75rem;
+                padding: 6px 12px;
+            }
+
+            .close-card-btn {
+                font-size: 0.65rem;
+                padding: 5px 10px;
+                margin-top: 6px;
+            }
+
+            .closing {
+                font-size: 0.7rem;
+                margin: 6px 0;
+            }
+
+            .signature {
+                margin-top: 8px;
+            }
+
+            .signature p {
+                font-size: 0.65rem;
+                margin-bottom: 2px;
+            }
+
+            .name {
+                font-size: 0.9rem;
+            }
+
+            .footer {
+                margin-top: 8px;
+                padding-top: 6px;
+            }
+
+            .couple {
+                font-size: 0.9rem;
+                margin-bottom: 3px;
+            }
+
+            .footer p {
+                font-size: 0.55rem;
+                margin-bottom: 6px;
+            }
+        }
+
+        /* Fade in animation */
+        .card {
+            animation: fadeInUp 1s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <!-- Background hearts -->
+        <div class="hearts">
+            <div class="heart heart1"></div>
+            <div class="heart heart2"></div>
+            <div class="heart heart3"></div>
+            <div class="heart heart4"></div>
+            <div class="heart heart5"></div>
+        </div>
+
+        <!-- Main card -->
+        <div class="card">
+            <div class="card-inner">
+                <!-- Front side -->
+                <div class="card-front">
+                    <div class="header">
+                        <h1 class="title">Thiệp Xin Lỗi</h1>
+                        <div class="date">Thứ 7, ngày 13 tháng 9 năm 2025</div>
+                    </div>
+
+                    <div class="heart-icon">💝</div>
+
+                    <div class="message">
+                        <p class="main-text">Gửi người tôi yêu thương nhất...</p>
+                        <p class="sub-text">Nhấn vào thiệp để mở</p>
+                        <button class="open-card-btn">📖 Mở thiệp</button>
+                    </div>
+
+                    <div class="decoration">
+                        <div class="rose">🌹</div>
+                        <div class="rose">🌹</div>
+                    </div>
+                </div>
+
+                <!-- Back side -->
+                <div class="card-back">
+                    <div class="content">
+                        <h2 class="sorry-title">Xin Lỗi Em...</h2>
+
+                        <div class="letter">
+                            <p>Em yêu của anh,</p>
+
+                            <p>Anh biết những ngày qua, anh đã làm em tổn thương. Những lời nói không suy nghĩ, những
+                                hành động thiếu quan tâm của anh đã khiến trái tim em đau đớn.</p>
+
+                            <p>Anh muốn nói với em rằng: <strong>Anh xin lỗi!</strong></p>
+
+                            <p>Tình yêu của chúng ta quá đáng quý để mất đi vì những hiểu lầm. Anh mong em cho anh một
+                                cơ hội để:</p>
+
+                            <ul class="promises">
+                                <li>💖 Hàn gắn những tổn thương</li>
+                                <li>🌟 Xây dựng lại niềm tin</li>
+                                <li>🌹 Yêu thương em nhiều hơn</li>
+                                <li>💑 Cùng nhau vượt qua mọi khó khăn</li>
+                            </ul>
+
+                            <p class="invitation">
+                                <strong>Hi vọng em sẽ gặp anh vào thứ 7 này </strong><br>
+                                <em>Địa điểm: Sài Gòn<br>
+                                    Thời gian: Tùy bé chọn</em>
+                            </p>
+
+                            <p class="closing">
+                                Hãy cho chúng ta một cơ hội để bắt đầu lại...<br>
+                                Anh sẽ chờ em!
+                            </p>
+
+                            <div class="signature">
+                                <p>Yêu em mãi mãi,</p>
+                                <p class="name">❤️ Hoàng Quang Linh ❤️</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="footer">
+                        <div class="couple">👫</div>
+                        <p>"Tình yêu thật sự là biết tha thứ và bắt đầu lại"</p>
+                        <button class="close-card-btn">💝 Đóng thiệp</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Click instruction -->
+        <div class="instruction">
+            <p>💝 Nhấn vào thiệp để xem nội dung 💝</p>
+        </div>
+    </div>
+
+    <script>// Xử lý hiệu ứng lật thiệp
+        document.addEventListener('DOMContentLoaded', function () {
+            const card = document.querySelector('.card');
+            const instruction = document.querySelector('.instruction');
+            const openBtn = document.querySelector('.open-card-btn');
+            const closeBtn = document.querySelector('.close-card-btn');
+            let isFlipped = false;
+
+            // Hàm mở thiệp
+            function openCard() {
+                if (!isFlipped) {
+                    card.classList.add('flipped');
+                    instruction.style.display = 'none';
+                    isFlipped = true;
+                    playClickSound();
+
+                    // Đảm bảo scroll về đầu thiệp khi mở trên mobile
+                    setTimeout(() => {
+                        const cardBack = document.querySelector('.card-back');
+                        if (cardBack) {
+                            cardBack.scrollTop = 0;
+                        }
+                    }, 100);
+
+                    // hide Card-front
+                    const cardFront = document.querySelector('.card-front');
+                    if (cardFront) {
+                        cardFront.style.display = 'none';
+                    }
+                }
+            }
+
+            // Hàm đóng thiệp
+            function closeCard() {
+                if (isFlipped) {
+                    card.classList.remove('flipped');
+                    instruction.style.display = 'block';
+                    isFlipped = false;
+                }
+            }
+
+            // Hàm toggle thiệp (chỉ áp dụng cho click vào card)
+            function toggleCard() {
+                if (!isFlipped) {
+                    openCard();
+                }
+            }
+
+            // Event listener cho nút mở
+            if (openBtn) {
+                openBtn.addEventListener('click', function (e) {
+                    e.stopPropagation();
+                    openCard();
+                });
+
+                openBtn.addEventListener('touchend', function (e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    openCard();
+                });
+            }
+
+            // Event listener cho nút đóng
+            if (closeBtn) {
+                closeBtn.addEventListener('click', function (e) {
+                    e.stopPropagation();
+                    closeCard();
+                });
+
+                closeBtn.addEventListener('touchend', function (e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    closeCard();
+                });
+            }
+
+            // Touch events cho card (chỉ mở, không đóng)
+            card.addEventListener('click', function (e) {
+                // Không toggle nếu click vào button
+                if (e.target.classList.contains('open-card-btn') ||
+                    e.target.classList.contains('close-card-btn')) {
+                    return;
+                }
+                toggleCard();
+            });
+
+            card.addEventListener('touchend', function (e) {
+                // Không toggle nếu touch vào button
+                if (e.target.classList.contains('open-card-btn') ||
+                    e.target.classList.contains('close-card-btn')) {
+                    return;
+                }
+                e.preventDefault();
+                e.stopPropagation();
+                toggleCard();
+            });
+
+            // Thêm visual feedback cho touch
+            card.addEventListener('touchstart', function (e) {
+                e.preventDefault();
+                this.style.transform = 'scale(0.95)';
+                this.style.transition = 'transform 0.1s ease';
+            });
+
+            card.addEventListener('touchend', function (e) {
+                setTimeout(() => {
+                    this.style.transform = 'scale(1)';
+                }, 100);
+            });
+
+            card.addEventListener('touchcancel', function (e) {
+                this.style.transform = 'scale(1)';
+            });
+
+            // Thêm hiệu ứng hover cho desktop (không áp dụng cho mobile)
+            if (!isMobile()) {
+                card.addEventListener('mouseenter', function () {
+                    if (!isFlipped) {
+                        this.style.transform = 'scale(1.02) rotateY(-5deg)';
+                    }
+                });
+
+                card.addEventListener('mouseleave', function () {
+                    if (!isFlipped) {
+                        this.style.transform = 'scale(1) rotateY(0deg)';
+                    }
+                });
+            }
+
+            // Tạo thêm trái tim bay (giảm số lượng cho mobile)
+            createFloatingHearts();
+
+            // Thêm hiệu ứng sparkle khi hover (chỉ desktop)
+            if (!isMobile()) {
+                addSparkleEffect();
+            }
+        });
+
+        // Kiểm tra device có phải mobile không
+        function isMobile() {
+            return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || window.innerWidth <= 768;
+        }
+
+        // Hàm tạo âm thanh click (tùy chọn)
+        function playClickSound() {
+            // Bạn có thể thêm file âm thanh nếu muốn
+            // const audio = new Audio('click-sound.mp3');
+            // audio.play();
+        }
+
+        // Tạo hiệu ứng trái tim bay ngẫu nhiên (tối ưu cho mobile)
+        function createFloatingHearts() {
+            const heartsContainer = document.querySelector('.hearts');
+            const interval = isMobile() ? 4000 : 2000; // Giảm tần suất cho mobile
+
+            setInterval(() => {
+                const heart = document.createElement('div');
+                heart.className = 'floating-heart';
+                heart.innerHTML = '💕';
+                heart.style.left = Math.random() * 100 + '%';
+                heart.style.top = '100%';
+                heart.style.position = 'absolute';
+                heart.style.fontSize = (Math.random() * 8 + 12) + 'px'; // Giảm size cho mobile
+                heart.style.opacity = '0.5';
+                heart.style.pointerEvents = 'none';
+                heart.style.animation = 'floatUp 4s ease-out forwards';
+                heart.style.zIndex = '1';
+
+                heartsContainer.appendChild(heart);
+
+                // Xóa heart sau khi animation kết thúc
+                setTimeout(() => {
+                    if (heart.parentNode) {
+                        heart.parentNode.removeChild(heart);
+                    }
+                }, 4000);
+            }, interval);
+        }
+
+        // Thêm CSS animation cho trái tim bay
+        const style = document.createElement('style');
+        style.textContent = `
+    @keyframes floatUp {
+        0% {
+            transform: translateY(0) rotate(0deg);
+            opacity: 0.6;
+        }
+        50% {
+            opacity: 1;
+        }
+        100% {
+            transform: translateY(-100vh) rotate(360deg);
+            opacity: 0;
+        }
+    }
+    
+    @keyframes sparkle {
+        0%, 100% {
+            opacity: 0;
+            transform: scale(0);
+        }
+        50% {
+            opacity: 1;
+            transform: scale(1);
+        }
+    }
+    
+    .sparkle {
+        position: absolute;
+        width: 4px;
+        height: 4px;
+        background: #fff;
+        border-radius: 50%;
+        animation: sparkle 1s ease-in-out;
+        pointer-events: none;
+    }
+`;
+        document.head.appendChild(style);
+
+        // Thêm hiệu ứng lấp lánh khi hover
+        function addSparkleEffect() {
+            const card = document.querySelector('.card');
+
+            card.addEventListener('mousemove', function (e) {
+                if (Math.random() > 0.8) { // 20% cơ hội tạo sparkle
+                    const sparkle = document.createElement('div');
+                    sparkle.className = 'sparkle';
+
+                    const rect = card.getBoundingClientRect();
+                    const x = e.clientX - rect.left;
+                    const y = e.clientY - rect.top;
+
+                    sparkle.style.left = x + 'px';
+                    sparkle.style.top = y + 'px';
+
+                    card.appendChild(sparkle);
+
+                    setTimeout(() => {
+                        if (sparkle.parentNode) {
+                            sparkle.parentNode.removeChild(sparkle);
+                        }
+                    }, 1000);
+                }
+            });
+        }
+
+        // Thêm hiệu ứng typing cho text (tùy chọn)
+        function typeWriterEffect(element, text, speed = 100) {
+            let i = 0;
+            element.innerHTML = '';
+
+            function typeWriter() {
+                if (i < text.length) {
+                    element.innerHTML += text.charAt(i);
+                    i++;
+                    setTimeout(typeWriter, speed);
+                }
+            }
+
+            typeWriter();
+        }
+
+        // Thêm hiệu ứng parallax cho background
+        window.addEventListener('mousemove', function (e) {
+            const hearts = document.querySelectorAll('.heart');
+            const x = e.clientX / window.innerWidth;
+            const y = e.clientY / window.innerHeight;
+
+            hearts.forEach((heart, index) => {
+                const speed = (index + 1) * 0.01;
+                const xMove = (x - 0.5) * speed * 100;
+                const yMove = (y - 0.5) * speed * 100;
+
+                heart.style.transform += ` translate(${xMove}px, ${yMove}px)`;
+            });
+        });
+
+        // Thêm hiệu ứng confetti khi mở thiệp (tùy chọn)
+        function createConfetti() {
+            const colors = ['#ff6b9d', '#ffd93d', '#6bcf7f', '#4dabf7', '#9775fa'];
+
+            for (let i = 0; i < 50; i++) {
+                setTimeout(() => {
+                    const confetti = document.createElement('div');
+                    confetti.style.position = 'fixed';
+                    confetti.style.left = Math.random() * 100 + '%';
+                    confetti.style.top = '-10px';
+                    confetti.style.width = '10px';
+                    confetti.style.height = '10px';
+                    confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                    confetti.style.pointerEvents = 'none';
+                    confetti.style.animation = 'confettiFall 3s linear forwards';
+                    confetti.style.zIndex = '1000';
+
+                    document.body.appendChild(confetti);
+
+                    setTimeout(() => {
+                        if (confetti.parentNode) {
+                            confetti.parentNode.removeChild(confetti);
+                        }
+                    }, 3000);
+                }, i * 50);
+            }
+        }
+
+        // Thêm CSS cho confetti
+        const confettiStyle = document.createElement('style');
+        confettiStyle.textContent = `
+    @keyframes confettiFall {
+        to {
+            transform: translateY(100vh) rotate(360deg);
+        }
+    }
+`;
+        document.head.appendChild(confettiStyle);
+    </script>
+</body>
+
+</html>
