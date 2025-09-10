@@ -401,6 +401,67 @@
             }
         }
 
+        /* Music Control Styles */
+        .music-control {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+        }
+
+        .music-btn {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+            border: 2px solid rgba(255, 255, 255, 0.8);
+            color: #fff;
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .music-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: scale(1.1);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .music-btn:active {
+            transform: scale(0.95);
+        }
+
+        .music-btn.playing {
+            background: rgba(255, 107, 157, 0.3);
+            border-color: #ff6b9d;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        .music-btn.paused {
+            background: rgba(128, 128, 128, 0.3);
+            border-color: rgba(128, 128, 128, 0.8);
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                transform: scale(1);
+                box-shadow: 0 4px 15px rgba(255, 107, 157, 0.2);
+            }
+
+            50% {
+                transform: scale(1.05);
+                box-shadow: 0 8px 25px rgba(255, 107, 157, 0.4);
+            }
+        }
+
         /* Back Card */
         .card-back {
             background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
@@ -700,6 +761,17 @@
             .instruction p {
                 font-size: 0.75rem;
             }
+
+            .music-control {
+                top: 15px;
+                right: 15px;
+            }
+
+            .music-btn {
+                width: 50px;
+                height: 50px;
+                font-size: 1.2rem;
+            }
         }
 
         @media (max-width: 360px) {
@@ -800,6 +872,17 @@
                 font-size: 0.55rem;
                 margin-bottom: 6px;
             }
+
+            .music-control {
+                top: 10px;
+                right: 10px;
+            }
+
+            .music-btn {
+                width: 45px;
+                height: 45px;
+                font-size: 1.1rem;
+            }
         }
 
         /* Fade in animation */
@@ -824,12 +907,30 @@
 <body>
     <div class="container">
         <!-- Background hearts -->
+        <!-- Audio Element -->
+        <audio id="backgroundMusic" autoplay loop>
+            <source src="nhac.mp3" type="audio/mpeg">
+            Trình duyệt của bạn không hỗ trợ audio.
+        </audio>
+
+        <!-- Music Control Button -->
+        <div class="music-control">
+            <button id="musicToggle" class="music-btn">
+                <span class="music-icon">🎵</span>
+            </button>
+        </div>
+
         <div class="hearts">
             <div class="heart heart1"></div>
             <div class="heart heart2"></div>
             <div class="heart heart3"></div>
             <div class="heart heart4"></div>
             <div class="heart heart5"></div>
+            <div class="heart heart6"></div>
+            <div class="heart heart7"></div>
+            <div class="heart heart8"></div>
+            <div class="heart heart9"></div>
+            <div class="heart heart10"></div>
         </div>
 
         <!-- Main card -->
@@ -914,6 +1015,89 @@
 
     <script>// Xử lý hiệu ứng lật thiệp
         document.addEventListener('DOMContentLoaded', function () {
+            // Music Control
+            const audio = document.getElementById('backgroundMusic');
+            const musicToggle = document.getElementById('musicToggle');
+            const musicIcon = musicToggle.querySelector('.music-icon');
+            let isPlaying = false;
+
+            // Auto play music when page loads
+            function initAudio() {
+                audio.volume = 0.3; // Set volume to 30%
+
+                // Set initial state as playing since we have autoplay
+                isPlaying = true;
+                musicToggle.classList.add('playing');
+                musicIcon.textContent = '🎵';
+
+                // Ensure music plays
+                const playPromise = audio.play();
+
+                if (playPromise !== undefined) {
+                    playPromise.then(() => {
+                        // Audio started successfully
+                        isPlaying = true;
+                        musicToggle.classList.remove('paused');
+                        musicToggle.classList.add('playing');
+                        musicIcon.textContent = '🎵';
+                    }).catch((error) => {
+                        // Auto-play was prevented
+                        console.log('Auto-play prevented:', error);
+                        isPlaying = false;
+                        musicToggle.classList.remove('playing');
+                        musicToggle.classList.add('paused');
+                        musicIcon.textContent = '🔇';
+                    });
+                }
+            }
+
+            // Try to start music on any user interaction
+            function startMusicOnInteraction() {
+                if (!isPlaying) {
+                    audio.play().then(() => {
+                        isPlaying = true;
+                        musicToggle.classList.remove('paused');
+                        musicToggle.classList.add('playing');
+                        musicIcon.textContent = '🎵';
+                    }).catch(() => {
+                        // Still couldn't play
+                    });
+                }
+            }
+
+            // Add event listeners for user interaction
+            document.addEventListener('click', startMusicOnInteraction, { once: true });
+            document.addEventListener('touchstart', startMusicOnInteraction, { once: true });
+            document.addEventListener('keydown', startMusicOnInteraction, { once: true });            // Toggle music play/pause
+            musicToggle.addEventListener('click', function () {
+                if (isPlaying) {
+                    audio.pause();
+                    isPlaying = false;
+                    musicToggle.classList.remove('playing');
+                    musicToggle.classList.add('paused');
+                    musicIcon.textContent = '🔇';
+                } else {
+                    audio.play().then(() => {
+                        isPlaying = true;
+                        musicToggle.classList.remove('paused');
+                        musicToggle.classList.add('playing');
+                        musicIcon.textContent = '🎵';
+                    }).catch((error) => {
+                        console.log('Play failed:', error);
+                    });
+                }
+            });
+
+            // Initialize audio
+            initAudio();
+
+            // Try to play music when window gets focus
+            window.addEventListener('focus', function () {
+                if (!isPlaying && !audio.paused) {
+                    startMusicOnInteraction();
+                }
+            });
+
             const card = document.querySelector('.card');
             const instruction = document.querySelector('.instruction');
             const openBtn = document.querySelector('.open-card-btn');
@@ -923,6 +1107,9 @@
             // Hàm mở thiệp
             function openCard() {
                 if (!isFlipped) {
+                    // Tự động phát nhạc nếu chưa được phát
+                    startMusicOnInteraction();
+
                     card.classList.add('flipped');
                     instruction.style.display = 'none';
                     isFlipped = true;
@@ -956,6 +1143,8 @@
             // Hàm toggle thiệp (chỉ áp dụng cho click vào card)
             function toggleCard() {
                 if (!isFlipped) {
+                    // Tự động phát nhạc nếu chưa được phát khi click vào card
+                    startMusicOnInteraction();
                     openCard();
                 }
             }
